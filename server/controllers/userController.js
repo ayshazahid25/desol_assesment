@@ -49,7 +49,16 @@ const getUser = asyncHandler(async (req, res) => {
   res.json(req.result);
 });
 
+// @desc Get all users
+// @route GET /api/users/all
+// @access Private (you may adjust access level as needed)
+const getAllUsers = asyncHandler(async (req, res) => {
+  const users = await Users.find({});
+  res.json(users);
+});
+
 module.exports = {
   loginUser,
   getUser,
+  getAllUsers,
 };
