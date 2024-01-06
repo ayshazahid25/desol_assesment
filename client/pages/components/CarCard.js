@@ -3,6 +3,9 @@ import React from "react";
 import { Card, CardContent, Typography, CardMedia } from "@mui/material";
 
 const CarCard = ({ car }) => {
+  if (!car) {
+    return null;
+  }
   return (
     <Card>
       <CardMedia
