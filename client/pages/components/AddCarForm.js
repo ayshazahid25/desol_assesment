@@ -11,6 +11,8 @@ import {
 } from "@mui/material";
 import { useEffect, useRef } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
+import Loader from "./Loader";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:6062";
@@ -22,6 +24,7 @@ const AddCarForm = () => {
   const [maxPictures, setMaxPictures] = useState(1);
   const [pictures, setPictures] = useState([]);
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const fileInputRef = useRef(null);
 
@@ -61,6 +64,8 @@ const AddCarForm = () => {
       pictures,
     };
 
+    console.log("data:", data);
+
     try {
       // Validate using Yup schema
       await validationSchema.validate(data, { abortEarly: false });
@@ -78,25 +83,34 @@ const AddCarForm = () => {
         formData.append(`pictures`, file);
       });
 
-      console.log("formdata");
-
       const authToken = localStorage.getItem("userToken");
 
-      console.log("authtoken:: ", authToken);
-
+      //set loading
+      setLoading(true);
       const response = await axios.post(
         `${API_BASE_URL}/api/cars/create`,
         formData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            boundary: `${formData.getBoundary()}`,
             "x-auth-token": authToken,
           },
         }
       );
-      console.log("response::", response);
+      // Reset the form
+      setCarModel("");
+      setPrice("");
+      setPhoneNumber("");
+      setMaxPictures(1);
+      setPictures([]);
+      if (response) {
+        setLoading(false);
+        toast.success(`Car created successfully!`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
     } catch (error) {
+      setLoading(false);
       if (error instanceof Yup.ValidationError) {
         // Yup validation error
         const yupErrors = {};
@@ -106,7 +120,9 @@ const AddCarForm = () => {
         setErrors(yupErrors);
       } else {
         console.error("Form submission failed", error);
-        // Handle other errors
+        toast.error("Error creating car. Please try again.", {
+          position: toast.POSITION.TOP_RIGHT,
+        });
       }
     }
   };
@@ -131,6 +147,8 @@ const AddCarForm = () => {
 
   return (
     <Container maxWidth="sm">
+      {loading && <Loader />}
+
       <form onSubmit={handleSubmit}>
         <TextField
           fullWidth

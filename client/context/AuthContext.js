@@ -14,10 +14,21 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/api/users`);
-        setUser(response.data);
+        // Check if there's a token in localStorage
+        const storedToken = localStorage.getItem("userToken");
+
+        if (storedToken) {
+          // If there's a token, set it in the axios headers
+          axios.defaults.headers.common["x-auth-token"] = `${storedToken}`;
+          // Fetch user data using the token
+          const response = await axios.get(`${API_BASE_URL}/api/users`);
+          setUser(response.data);
+        } else {
+          // If there's no token, set user to null
+          setUser(null);
+        }
       } catch (error) {
-        // If there is an error, set user to null
+        console.error("Error checking authentication:", error);
         setUser(null);
       } finally {
         // Set loading to false after checking authentication
@@ -39,6 +50,9 @@ export const AuthProvider = ({ children }) => {
       // Store the token in local storage
       localStorage.setItem("userToken", token);
 
+      // Set the token in the axios headers
+      axios.defaults.headers.common["x-auth-token"] = `${token}`;
+
       setUser(userData);
     } catch (error) {
       console.error("Login failed", error);
@@ -49,6 +63,8 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     // Remove the token from local storage on logout
     localStorage.removeItem("userToken");
+    // Remove the token from axios headers
+    delete axios.defaults.headers.common["Authorization"];
     setUser(null);
   };
 

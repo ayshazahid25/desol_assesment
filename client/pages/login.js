@@ -4,10 +4,13 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import LoginForm from "./components/LoginForm";
 import { useAuth } from "@/context/AuthContext";
+import Loader from "./components/Loader";
 
 const Login = () => {
   const router = useRouter();
-  const { user, loading, isAuthenticated } = useAuth();
+  const { isAuthenticated, loading } = useAuth();
+
+  console.log("isAuthenticated:", isAuthenticated, loading);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -16,10 +19,16 @@ const Login = () => {
   }, [isAuthenticated, router]);
 
   return (
-    <div>
-      <h1 className="text-center mt-2">Login Page</h1>
-      <LoginForm />
-    </div>
+    <>
+      {loading ? (
+        <Loader />
+      ) : (
+        <div>
+          <h1 className="text-center mt-2">Login Page</h1>
+          <LoginForm />
+        </div>
+      )}
+    </>
   );
 };
 
