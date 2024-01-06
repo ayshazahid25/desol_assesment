@@ -17,6 +17,9 @@ const Navbar = () => {
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           Car Service
         </Typography>
+        <Link href="/allCars" passHref className="text-white">
+          <Button color="inherit">All Cars</Button>
+        </Link>
         {isAuthenticated && (
           <Button color="inherit" onClick={handleLogout}>
             Logout

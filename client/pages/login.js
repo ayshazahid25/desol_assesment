@@ -10,8 +10,6 @@ const Login = () => {
   const router = useRouter();
   const { isAuthenticated, loading } = useAuth();
 
-  console.log("isAuthenticated:", isAuthenticated, loading);
-
   useEffect(() => {
     if (isAuthenticated) {
       router.push("/");
