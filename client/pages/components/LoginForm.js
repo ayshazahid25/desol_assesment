@@ -21,7 +21,7 @@ const LoginForm = () => {
     e.preventDefault();
 
     const data = {
-      email,
+      email: email.toLowerCase(),
       password,
     };
 

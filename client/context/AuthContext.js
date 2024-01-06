@@ -4,7 +4,8 @@ import axios from "axios";
 
 const AuthContext = createContext();
 
-const API_BASE_URL = "http://localhost:6062";
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:6062";
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
