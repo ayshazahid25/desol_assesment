@@ -1,4 +1,3 @@
-const cloudinary = require("cloudinary").v2;
 const expressAsyncHandler = require("express-async-handler");
 const { Car, validateCar } = require("../models/cars");
 
@@ -6,13 +5,16 @@ const { Car, validateCar } = require("../models/cars");
 // @route POST /api/cars/create
 // @access Public
 const createCar = expressAsyncHandler(async (req, res) => {
-  // Validate request body
   const { error } = validateCar(req.body);
   if (error) {
     return res.status(400).send(error.details[0].message);
   }
 
   try {
+    if (req.files && req.files.length > 0) {
+      // Extract URLs from Cloudinary response and store them in the array
+      uploadedImages = req.files.map((file) => file.path);
+    }
     // Create a new car entry
     const car = new Car({
       user: req.result._id,
@@ -20,7 +22,7 @@ const createCar = expressAsyncHandler(async (req, res) => {
       price: req.body.price,
       phoneNumber: req.body.phoneNumber,
       maxPictures: req.body.maxPictures,
-      pictures: req.body.pictures,
+      pictures: uploadedImages,
     });
 
     // Save the car entry to the database

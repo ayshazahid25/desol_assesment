@@ -3,11 +3,16 @@ const { body } = require("express-validator");
 const { protect } = require("../middleware/authMiddleware");
 const { createCar, getAllCars } = require("../controllers/carController");
 
+const { storage } = require("../storage/storage");
+const multer = require("multer");
+const upload = multer({ storage });
+
 const router = express.Router();
 
 router.post(
   "/create",
   protect,
+  upload.array("pictures"),
   [
     body("carModel")
       .isString()
