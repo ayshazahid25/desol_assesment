@@ -5,7 +5,7 @@ import { useAuth } from "@/context/AuthContext";
 import CarCard from "./components/CarCard";
 import Layout from "./components/Layout";
 import Loader from "./components/Loader";
-import { Button, Grid } from "@mui/material";
+import { Button, Container, Grid } from "@mui/material";
 import { useRouter } from "next/router";
 
 const API_BASE_URL =
@@ -49,30 +49,32 @@ const AllCars = () => {
 
   return (
     <Layout>
-      <div className="mb-2">
-        <h1 className="text-center mt-2">All Cars</h1>
-        {isAuthenticated && (
-          <Button
-            type="submit"
-            variant="outlined"
-            style={{ marginTop: 15, marginBottom: 15 }}
-            onClick={() => router.push("/")}
-          >
-            Add Car
-          </Button>
-        )}
-        {loader ? (
-          <Loader />
-        ) : (
-          <Grid container spacing={3} justifyContent="center">
-            {cars.map((car) => (
-              <Grid item key={car._id} xs={12} sm={6} md={4} lg={3}>
-                <CarCard car={car} />
-              </Grid>
-            ))}
-          </Grid>
-        )}
-      </div>
+      <Container>
+        <div className="mb-2">
+          <h1 className="text-center mt-2">All Cars</h1>
+          {isAuthenticated && (
+            <Button
+              type="submit"
+              variant="outlined"
+              style={{ marginTop: 15, marginBottom: 15 }}
+              onClick={() => router.push("/")}
+            >
+              Add Car
+            </Button>
+          )}
+          {loader ? (
+            <Loader />
+          ) : (
+            <Grid container spacing={3} justifyContent="center">
+              {cars.map((car) => (
+                <Grid item key={car._id} xs={12} sm={6} md={4} lg={3}>
+                  <CarCard car={car} />
+                </Grid>
+              ))}
+            </Grid>
+          )}
+        </div>
+      </Container>
     </Layout>
   );
 };

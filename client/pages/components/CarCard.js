@@ -29,6 +29,12 @@ const CarCard = ({ car }) => {
             ))}
           </div>
         )}
+        {/* Display User Information */}
+        <div style={{ marginTop: "8px" }}>
+          <Typography variant="subtitle2">Owner:</Typography>
+          <Typography variant="body2">Name: {car.user.full_name}</Typography>
+          <Typography variant="body2">Email: {car.user.email}</Typography>
+        </div>
       </CardContent>
     </Card>
   );
