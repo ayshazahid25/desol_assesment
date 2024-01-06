@@ -78,7 +78,11 @@ const AddCarForm = () => {
         formData.append(`pictures`, file);
       });
 
+      console.log("formdata");
+
       const authToken = localStorage.getItem("userToken");
+
+      console.log("authtoken:: ", authToken);
 
       const response = await axios.post(
         `${API_BASE_URL}/api/cars/create`,
@@ -91,6 +95,7 @@ const AddCarForm = () => {
           },
         }
       );
+      console.log("response::", response);
     } catch (error) {
       if (error instanceof Yup.ValidationError) {
         // Yup validation error
