@@ -21,6 +21,6 @@ route.post(
   loginUser
 );
 
-route.get("/", protect, getUser);
+route.get("/", getUser);
 
 module.exports = route;
